@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register application routess
 func Register() *gin.Engine {
 	r := gin.New()
 
