@@ -1,18 +1,34 @@
 package main
 
 import (
-	"api/app/util/database"
-	"api/app/util/setting"
+	"api/app/service/config"
+	"api/database"
 	"api/routes"
+	"fmt"
 	"net/http"
 )
 
 func main() {
 
-	setting.Register()
+	// load config app.ini filefe
+	config.Register()
+	// register database service
 	database.Register()
 
 	router := routes.Register()
 
-	http.ListenAndServe(":8000", router)
+	readTimeout := config.Server.ReadTimeout
+	writeTimeout := config.Server.WriteTimeout
+	endPoint := fmt.Sprintf(":%d", config.Server.HttpPort)
+	maxHeaderBytes := 1 << 20
+
+	serv := &http.Server{
+		Addr:           endPoint,
+		Handler:        router,
+		ReadTimeout:    readTimeout,
+		WriteTimeout:   writeTimeout,
+		MaxHeaderBytes: maxHeaderBytes,
+	}
+
+	serv.ListenAndServe()
 }

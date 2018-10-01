@@ -1,6 +1,7 @@
-package setting
+package config
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -43,19 +44,28 @@ var App = &app{}
 var Server = &server{}
 var Database = &database{}
 var Redis = &redis{}
+var RunMode string
+var DebugMode bool
 
+//Register load application config from file
 func Register() {
 	var err error
+
+	env, err := ini.Load("config/.env.ini")
+	if err != nil {
+		log.Fatal("Fail to load env.ini")
+	}
+
+	fmt.Println(env)
 
 	Config, err = ini.Load("config/app.ini")
 	if err != nil {
 		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
 	}
-
-	mapTo("app", App)
-	mapTo("server", Server)
-	mapTo("database", Database)
-	mapTo("redis", Redis)
+	MapTo("app", App)
+	MapTo("server", Server)
+	MapTo("database", Database)
+	MapTo("redis", Redis)
 
 	Server.ReadTimeout = Server.ReadTimeout * time.Second
 	Server.WriteTimeout = Server.ReadTimeout * time.Second
@@ -63,7 +73,8 @@ func Register() {
 
 }
 
-func mapTo(section string, value interface{}) {
+//MapTo map config file
+func MapTo(section string, value interface{}) {
 	err := Config.Section(section).MapTo(value)
 
 	if err != nil {
