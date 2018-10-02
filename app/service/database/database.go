@@ -14,7 +14,8 @@ var (
 	err error
 )
 
-func initTables()  {
+// InitTables 自动生成table
+func InitTables()  {
 
 }
 
