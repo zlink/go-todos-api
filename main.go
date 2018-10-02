@@ -14,7 +14,7 @@ func main() {
 	config.Register()
 	// register database service
 	database.Register()
-
+	// register router service
 	router := routes.Register()
 
 	readTimeout := config.Server.ReadTimeout

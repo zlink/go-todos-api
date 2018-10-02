@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"time"
-
-	"github.com/go-ini/ini"
 )
 
 type app struct {
@@ -57,6 +55,11 @@ func Register() {
 	}
 
 	fmt.Println(env)
+
+	Env, err := ini.load("config/.env.ini")
+	if err != nil {
+		log.Fatalf("Fail to load config env.ini file: %v", err)
+	}
 
 	Config, err = ini.Load("config/app.ini")
 	if err != nil {
