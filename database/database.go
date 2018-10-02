@@ -14,6 +14,10 @@ var (
 	err error
 )
 
+func initTables()  {
+
+}
+
 func Register() {
 	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 	//	config.Database.User,

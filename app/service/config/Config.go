@@ -81,6 +81,6 @@ func MapTo(section string, value interface{}) {
 	err := Config.Section(section).MapTo(value)
 
 	if err != nil {
-		log.Fatalf("Config.MapTo %s Setting err: %v", section, err)
+		log.Fatalf("config.MapTo %s Setting err: %v", section, err)
 	}
 }
