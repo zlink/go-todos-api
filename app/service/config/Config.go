@@ -1,9 +1,10 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"time"
+
+	"github.com/go-ini/ini"
 )
 
 type app struct {
@@ -16,6 +17,7 @@ type app struct {
 
 type server struct {
 	HttpPort     int
+	SocketPort   int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 }
@@ -48,18 +50,6 @@ var DebugMode bool
 //Register load application config from file
 func Register() {
 	var err error
-
-	env, err := ini.Load("config/.env.ini")
-	if err != nil {
-		log.Fatal("Fail to load env.ini")
-	}
-
-	fmt.Println(env)
-
-	Env, err := ini.load("config/.env.ini")
-	if err != nil {
-		log.Fatalf("Fail to load config env.ini file: %v", err)
-	}
 
 	Config, err = ini.Load("config/app.ini")
 	if err != nil {
