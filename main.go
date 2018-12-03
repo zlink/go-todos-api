@@ -2,13 +2,10 @@ package main
 
 import (
 	"api/app/service/config"
-	"api/database"
+	"api/app/service/database"
 	"api/routes"
-	"context"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -16,13 +13,17 @@ func main() {
 
 	// load config app.ini filefe
 	config.Register()
+
 	// register database service
 	database.Register()
+	defer database.Close()
+	//database.DB.AutoMigrate(models.User{})
+
 	// register router service
 	router := routes.Register()
 
-	readTimeout := config.Server.ReadTimeout
-	writeTimeout := config.Server.WriteTimeout
+	readTimeout := config.Server.ReadTimeout * time.Second
+	writeTimeout := config.Server.WriteTimeout * time.Second
 	endPoint := fmt.Sprintf(":%d", config.Server.HttpPort)
 	maxHeaderBytes := 1 << 20
 
@@ -34,25 +35,27 @@ func main() {
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-	go func() {
-		if err := serv.ListenAndServe(); err != nil {
-			log.Printf("Listen: %s \n", err)
-		}
-	}()
+	serv.ListenAndServe()
 
-	quit := make(chan os.Signal)
-	Signal.Notify(quit, os.Interrupt)
-	<-quit
+	// go func() {
+	// 	if err := serv.ListenAndServe(); err != nil {
+	// 		log.Printf("Listen: %s \n", err)
+	// 	}
+	// }()
 
-	log.Println("Shutdown Server ...")
+	// quit := make(chan os.Signal)
+	// Signal.Notify(quit, os.Interrupt)
+	// <-quit
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// log.Println("Shutdown Server ...")
 
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
-	if err := s.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown: ", err)
-	}
+	// defer cancel()
 
-	log.Println("Server exiting...")
+	// if err := s.Shutdown(ctx); err != nil {
+	// 	log.Fatal("Server Shutdown: ", err)
+	// }
+
+	// log.Println("Server exiting...")
 }

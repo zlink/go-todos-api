@@ -2,11 +2,12 @@ package database
 
 import (
 	"api/app/service/config"
+	"fmt"
 	"log"
 
 	"github.com/jinzhu/gorm"
-	// _ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var (
@@ -14,21 +15,16 @@ var (
 	err error
 )
 
-// InitTables 自动生成table
-func InitTables()  {
-
-}
-
 func Register() {
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-	//	config.Database.User,
-	//	config.Database.Password,
-	//	config.Database.Host,
-	//	config.Database.Name,
-	//)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		config.Database.User,
+		config.Database.Password,
+		config.Database.Host,
+		config.Database.Name,
+	)
 
-	// DB, err = gorm.Open(config.Database.Type, dsn)
-	DB, err = gorm.Open("sqlite3", "database.sqlite")
+	DB, err = gorm.Open(config.Database.Type, dsn)
+	// DB, err = gorm.Open("sqlite3", "database.sqlite")
 	if err != nil {
 		log.Println(err)
 	}
@@ -42,6 +38,6 @@ func Register() {
 	DB.DB().SetMaxOpenConns(100)
 }
 
-func close() {
+func Close() {
 	defer DB.Close()
 }
