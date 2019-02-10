@@ -13,6 +13,7 @@ func main() {
 
 	// load config app.ini filefe
 	config.Register()
+	fmt.Println("register configs success..")
 
 	// register database service
 	database.Register()
