@@ -7,7 +7,7 @@ import (
 )
 
 func Login(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{"code": 200, "msg": "auth successed"})
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "msg": "auth succeeded"})
 }
 
 func Logout(ctx *gin.Context) {

@@ -10,7 +10,7 @@ func All(ctx *gin.Context) {
 	database.DB.Table("todos").First(&todo)
 }
 
-func One(ctx *gin.Context) {
+func First(ctx *gin.Context) {
 
 }
 
